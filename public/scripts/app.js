@@ -33,9 +33,18 @@ var onRemoveAll = function onRemoveAll() {
 	render();
 };
 
+var onMakeDecision = function onMakeDecision() {
+	//Math.floor redondea el valor pasado por parametro
+	//.random se multiplica por la cantidad de opciones para que de dentro del rango
+	var randomNum = Math.floor(Math.random() * app.options.length);
+	var option = app.options[randomNum];
+	alert(option);
+};
+
 //Se obtiene el elemento del hmtl en donde se hará el render del template
 var appRoute = document.getElementById('app');
 
+//render se llama cada vez que se hace un cambio a la página (o cuando se renderiza por primera vez)
 var render = function render() {
 
 	var template = React.createElement(
@@ -58,10 +67,9 @@ var render = function render() {
 			app.options.length > 0 ? 'Estas son tus opciones' : 'No options'
 		),
 		React.createElement(
-			'p',
-			null,
-			app.options.length,
-			' '
+			'button',
+			{ disabled: app.options.length === 0, onClick: onMakeDecision },
+			'What Should I Do? '
 		),
 		React.createElement(
 			'button',
@@ -71,16 +79,15 @@ var render = function render() {
 		React.createElement(
 			'ol',
 			null,
-			React.createElement(
-				'li',
-				null,
-				'Item one'
-			),
-			React.createElement(
-				'li',
-				null,
-				'Item two'
-			)
+			//map itera en cada elemento del array y ejecuta el callback
+			//key es necesario ponerlo para que sirva de identificador para react
+			app.options.map(function (option) {
+				return React.createElement(
+					'li',
+					{ key: option },
+					option
+				);
+			})
 		),
 		React.createElement(
 			'form',
