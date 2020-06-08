@@ -3,48 +3,59 @@ console.log('App.js running');
 //JSX - JavaScript XML
 
 
-var app ={
+const app ={
 	title: 'Indecesion App',
 	subtitle: 'Deja que un compu te controle',
-	options: ['One', 'Two']
+	options: []
 };
 
 
-var template = (
-	<div> 
-		<h1>{app.title}</h1> 
-		{app.subtitle && <p>{app.subtitle} </p>}
-		<p>{app.options.length>0 ? 'Estas son tus opciones' : 'No options'}</p>
-		<ol>
-			<li>Item one</li>
-			<li>Item two</li>
-		</ol> 
-	</div>
-);
+//e es el evento que se recibe cuando se utiliza el atributo onSubmit en un form
+const onFormSubmit = (e) =>{
+	e.preventDefault();		//.preventDeafult() hace que el form no mande los datos por URL
 
-var user ={
-	name: 'Juan',
-	age: 21,
-	location: 'Cartacho'
-};
+	//.target hace referencia al elemento que inició el evento, en este caso, el form
+	//.elements referencia los elementos del target, indexados por nombre
+	//option es el nombre del imput del form
+	const option = e.target.elements.option.value;
 
-var getLocation = (location) =>{
-	if(location){
-		return <p>Location: {location}</p>; 
+	if(option){
+		app.options.push(option);
+		e.target.elements.option.value = '';
 	}
+
+	render();
 };
 
-
-var templateTwo = (
-	<div>
-		<h1>{user.name ? user.name : 'Anonymous'}</h1> 
-		{(user.age && user.age >= 18) && <p>Edad: {user.age}</p>}
-		{getLocation(user.location)}
-	</div>
-);
+const onRemoveAll= () =>{
+	app.options = [];
+	render();
+};
 
 //Se obtiene el elemento del hmtl en donde se hará el render del template
-var appRoute = document.getElementById('app');
- 
+const appRoute = document.getElementById('app');
 
-ReactDOM.render(template, appRoute);
+const render = () =>{
+
+	const template = (
+		<div> 
+			<h1>{app.title}</h1>  
+			{app.subtitle && <p>{app.subtitle} </p>}
+			<p>{app.options.length>0 ? 'Estas son tus opciones' : 'No options'}</p>
+			<p>{app.options.length} </p>
+			<button onClick={onRemoveAll}>Remove All</button>
+			<ol>
+				<li>Item one</li>
+				<li>Item two</li>
+			</ol> 
+			<form onSubmit={onFormSubmit}>
+				<input type="text" name="option"/>
+				<button>Add Option</button>
+			</form>
+		</div>
+	);
+
+	ReactDOM.render(template, appRoute);
+};
+
+render();
