@@ -33,20 +33,33 @@ class Header extends React.Component{
 }
 
 class Action extends React.Component{
+	//Se crea la función aquí para que se exporte con el Component
+	handlePick(){
+		alert('Handle Pick');
+	}
 	render(){
 		return (
 			<div>
-				<button>What Should I Do</button>
+				<button onClick={this.handlePick}>What Should I Do</button>
 			</div>
 		);
 	}
 }
 
 class Options extends React.Component{
+	//Se sobreescribe el constructor para hacer el binding con el this original
+	constructor(props){
+		super(props);
+		//Se agrega a handleRemoveAll el bind con el this original
+		this.handleRemoveAll = this.handleRemoveAll.bind(this);
+	}
+	handleRemoveAll(){
+		console.log(this.props.options);
+	}
 	render(){
 		return (
 			<div>
-				<p>Estas son tus opciones: {this.props.options.length}</p>
+				<button onClick={this.handleRemoveAll}>Remove All</button>
 				{this.props.options.map((option) => <Option key={option} optiontext={option}/>)}
 			</div>
 		);
@@ -64,10 +77,24 @@ class Option extends React.Component{
 }
 
 class AddOption extends React.Component{
+	handleAddOption(e){
+		e.preventDefault();
+
+
+		const option = e.target.elements.option.value.trim();
+
+		if(option){
+			alert(option);
+		}
+
+	}
 	render(){
 		return (
 			<div>
-				<p>AddOption</p>
+				<form onSubmit={this.handleAddOption}>
+					<input type="text" name="option"/>
+					<button>Add Option</button>
+				</form>
 			</div>
 		);
 	}
