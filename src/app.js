@@ -1,17 +1,74 @@
 //.Component permite que la clase Header sea un React Component
 class IndecisionApp extends React.Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			options: []
+		};
+		this.handleDeleteOptions= this.handleDeleteOptions.bind(this);
+		this.handlePick = this.handlePick.bind(this);
+		this.handleAddOption = this.handleAddOption.bind(this);
+	}
+
+	//Se declara aquí para que los componentes hijos puedan hacer modificaciones de valores superiores
+	//Para hacerlo, se pasa por props a los hijos la función
+	handleDeleteOptions(){
+		this.setState(() =>{
+			return {
+				options: []
+			};
+		});
+	}
+
+	handlePick(){
+		const option = Math.floor(Math.random()*this.state.options.length);
+		alert(this.state.options[option]);
+	}
+
+
+	handleAddOption(option){
+		if(!option){
+			return 'Ingrese valor valido';
+		}
+		//.indexOf() retorna -1 si no existe el objeto
+		else if(this.state.options.indexOf(option)>-1){
+			return 'La opción ya existe';
+		}
+
+		this.setState((prevState) =>{
+			return {
+				//.concat toma el array desde donde se está llamando y lo 
+				//concatena con el array párametro (si es 1 valor simplemente lo agrega), y retorna el array concatenado
+				options: prevState.options.concat(option)
+			}
+		})
+	}
+
+
 	render(){
 		const title = 'Indecision';
 		const subtitle = 'Deja que un compu te controle';
-		const options = ['Una cosa', 'Cosa dos', 'La cosa cuatro'];
 
 		return (
 			<div>
 				{/*Así se renderiza un React component*/}
 				<Header title={title} subtitle={subtitle}/>
-				<Action />
-				<Options  options={options}/>
-				<AddOption />
+				<Action 
+					hasOptions={(this.state.options.length>0)}
+					handlePick={this.handlePick}
+				/>
+				<Options  
+					options={this.state.options}
+			
+					handleDeleteOptions={
+						/*Se pasa por props la función para que los componentes
+						nesteados tenga acceso a ellos*/
+						this.handleDeleteOptions
+					}
+				/>
+				<AddOption
+					handleAddOption={this.handleAddOption}
+				/>
 			</div>
 		);
 	}
@@ -33,34 +90,27 @@ class Header extends React.Component{
 }
 
 class Action extends React.Component{
-	//Se crea la función aquí para que se exporte con el Component
-	handlePick(){
-		alert('Handle Pick');
-	}
 	render(){
 		return (
 			<div>
-				<button onClick={this.handlePick}>What Should I Do</button>
+				<button 
+					onClick={this.props.handlePick}
+					disabled={!this.props.hasOptions}>
+					What Should I Do
+				</button>
 			</div>
 		);
 	}
 }
 
 class Options extends React.Component{
-	//Se sobreescribe el constructor para hacer el binding con el this original
-	constructor(props){
-		super(props);
-		//Se agrega a handleRemoveAll el bind con el this original
-		this.handleRemoveAll = this.handleRemoveAll.bind(this);
-	}
-	handleRemoveAll(){
-		console.log(this.props.options);
-	}
 	render(){
 		return (
 			<div>
-				<button onClick={this.handleRemoveAll}>Remove All</button>
-				{this.props.options.map((option) => <Option key={option} optiontext={option}/>)}
+				<button onClick={this.props.handleDeleteOptions}>Remove All</button>
+				{
+					this.props.options.map((option) => <Option key={option} optiontext={option}/>)
+				}
 			</div>
 		);
 	}
@@ -77,20 +127,37 @@ class Option extends React.Component{
 }
 
 class AddOption extends React.Component{
+	//Es necesario sobreescribir el constructor porque handleAddOption utiliza this
+	constructor(props){
+		super(props);
+		this.handleAddOption=this.handleAddOption.bind(this);
+
+		//Para manejar el mensaje de error constantemente se indica el error en el state
+		this.state ={
+			error: undefined
+		}
+	}
 	handleAddOption(e){
 		e.preventDefault();
 
 
 		const option = e.target.elements.option.value.trim();
+		
+		const error = this.props.handleAddOption(option);
 
-		if(option){
-			alert(option);
-		}
+		//Para manejar 
+		this.setState(() =>{
+			return {
+				error
+			};
+		});
+
 
 	}
 	render(){
 		return (
 			<div>
+				{this.state.error && <p>{this.state.error}</p>}
 				<form onSubmit={this.handleAddOption}>
 					<input type="text" name="option"/>
 					<button>Add Option</button>
