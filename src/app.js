@@ -4,13 +4,45 @@
 class IndecisionApp extends React.Component{
 	constructor(props){
 		super(props);
-		this.state = {
-			options: props.options 	//props.options está disponible por que más abajo se indicó el defaultProps
-		};
+
+		//binding del this a los metodos
 		this.handleDeleteOptions= this.handleDeleteOptions.bind(this);
 		this.handlePick = this.handlePick.bind(this);
 		this.handleAddOption = this.handleAddOption.bind(this);
 		this.handleDeleteOption = this.handleDeleteOption.bind(this);
+
+		this.state = {
+			options: [] 	
+		};
+	}
+
+
+	//life cycle method, se ejcuta cuando el component se ejecuta en el browser
+	componentDidMount(){
+		try{
+			const json = localStorage.getItem('options');
+			const options = JSON.parse(json);
+			if(options){
+				this.setState(() => ({options}));
+			}
+		} catch(e){
+
+		}
+
+	}
+
+	//life cycle method cuando se actualiza la página
+	//Recibe los props y el state antes de ser actualizado
+	componentDidUpdate(prevProps, prevState){
+		if(prevState.options.length !== this.state.options.length){
+			const json = JSON.stringify(this.state.options);
+			localStorage.setItem('options', json);
+		}
+	}
+
+	//Se ejecuta antes de que se quite un component
+	componentWillUnmount(){
+		console.log('UNMOUNT')
 	}
 
 	//Se declara aquí para que los componentes hijos puedan hacer modificaciones de valores superiores
@@ -93,10 +125,10 @@ class IndecisionApp extends React.Component{
 	}
 }
 
-
+/*	Permite indicar valores por defecto del props
 IndecisionApp.defaultProps = {
 	options: []
-};
+};*/
 
 //----------------------------------------------------------------
 
@@ -191,6 +223,7 @@ const Options = (props) =>{
 	return (
 		<div>
 			<button onClick={props.handleDeleteOptions}>Remove All</button>
+			{props.options.length === 0 && <p>Ingrese una opción</p>}
 			{
 				props.options.map((option) =>(
 					<Option 
@@ -271,6 +304,9 @@ class AddOption extends React.Component{
 		//Esto es lo mismo que lo de arriba
 		this.setState(() => ({error}) );
 
+		if(!error){
+			e.target.elements.option.value='';
+		}
 
 	}
 	render(){
