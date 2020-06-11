@@ -19,11 +19,21 @@ class Options extends React.Component{
 //Versión Stateless Functional Component de Options
 const Options = (props) =>(
 	<div>
-		<button onClick={props.handleDeleteOptions}>Remove All</button>
-		{props.options.length === 0 && <p>Ingrese una opción</p>}
+		<div className='widget-header'>
+			<h3 className='widget__header__title'>Your Options</h3>
+			<button 
+					className='button button--link'
+				onClick={props.handleDeleteOptions}
+			>
+				Remove All
+			</button>
+		</div>
+		
+		{props.options.length === 0 && <p className='widget__message'>Ingrese una opción</p>}
 		{
 			props.options.map((option) =>(
 				<Option 
+				className='button button--link'
 					key={option} 
 					optiontext={option}
 					handleDeleteOption={props.handleDeleteOption}

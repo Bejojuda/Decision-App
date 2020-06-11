@@ -20,6 +20,8 @@ const Option =  (props) =>(
 	<div>
 		Option: {props.optiontext}
 		<button 
+			//button es un block de css, button--link es un modifier
+			className='button button--link'
 			onClick={
 					//De esta manera es que se pasa un parametro a una función del
 					//React component padre
