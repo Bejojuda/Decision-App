@@ -1,6 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 
-const template = <p>Testing 4</p>;
+import IndecisionApp from './components/IndecisionApp';
 
-ReactDOM.render(template, document.getElementById('app'));
+ 
+
+
+
+//Se renderiza directamente el componente IndecisionApp
+ReactDOM.render(<IndecisionApp options={[]}/>, document.getElementById('app'));
+
+class OldSyntax{
+	constructor(){
+		this.name="Andrew";
+	}
+}
+
+const oldSyntax = new OldSyntax();
+
+console.log(oldSyntax);
+
+
+
+class NewSyntax{
+	name = 'Jen';
+}
+
+const newSyntax = new NewSyntax();
+
+console.log(newSyntax);

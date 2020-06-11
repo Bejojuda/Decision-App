@@ -16,5 +16,12 @@ module.exports = {
 			exclude: /node_modules/
 		}]
 
+	},
+	devtool: 'cheap-module-eval-source-app',
+	devServer: {
+		contentBase: path.join(__dirname, 'public')
+	},
+	resolve: {
+      extensions: [".wasm", ".ts", ".tsx", ".mjs", ".cjs", ".js", ".json"],
 	}
 };
