@@ -20,17 +20,15 @@ class Header extends React.Component{
 
 
 //Versión Stateless Functional Component de Header
-const Header = (props) =>{
-	//Retorna un jsx
-	return (
-		<div>
-			{/*this.props referencia las propiedade pasadas al Component
-			al momento de renderizarlo*/}
-			<h1>{props.title}</h1>
-			{props.subtitle &&  <h2>{props.subtitle}</h2>}
-		</div>
-	);
-}
+const Header = (props) =>(
+	<div>
+		{/*this.props referencia las propiedade pasadas al Component
+		al momento de renderizarlo*/}
+		<h1>{props.title}</h1>
+		{props.subtitle &&  <h2>{props.subtitle}</h2>}
+	</div>
+);
+
 
 //Permite indicar valor predeterminados en caso de que no pasen props
 Header.defaultProps = {

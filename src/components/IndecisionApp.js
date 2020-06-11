@@ -4,11 +4,13 @@ import AddOption from './AddOption';
 import Options from './Options';
 import Header from './Header';
 import Action from './Action';
+import OptionModal from './OptionModal'
 
 //.Component permite que la clase Header sea un React Component
 export default class IndecisionApp extends React.Component{
 	state = {
-			options: [] 	
+			options: [],
+			selectedOption: undefined		//Encargado de mostrar el Modal 
 	}
 
 	/*constructor(props){
@@ -42,8 +44,11 @@ export default class IndecisionApp extends React.Component{
 	}
 
 	handlePick = () =>{
-		const option = Math.floor(Math.random()*this.state.options.length);
-		alert(this.state.options[option]);
+		const number = Math.floor(Math.random()*this.state.options.length);
+		const option = this.state.options[number];
+		this.setState(() => ({
+			selectedOption: option
+		}));
 	}
 
 	handleDeleteOption = (optionToRemove) => {
@@ -77,6 +82,9 @@ export default class IndecisionApp extends React.Component{
 		this.setState((prevState) => ({options: prevState.options.concat(option)}));
 	}
 
+	handleClearSelectedOption = () =>{
+		this.setState(() => ({selectedOption: undefined}));
+	}
 
 
 	//life cycle method, se ejcuta cuando el component se ejecuta en el browser
@@ -130,6 +138,10 @@ export default class IndecisionApp extends React.Component{
 				/>
 				<AddOption
 					handleAddOption={this.handleAddOption}
+				/>
+				<OptionModal
+					selectedOption={this.state.selectedOption}
+					handleClearSelectedOption={this.handleClearSelectedOption}
 				/>
 			</div>
 		);
