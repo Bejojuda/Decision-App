@@ -1,0 +1,36 @@
+.add-option{
+	display: flex;
+	flex-direction: column;
+	padding: $m-size;
+
+}
+
+.add-option__input{
+	//Hace que el input tome todo el espacio restante que queda dentro del block del flex
+	background: $dark-blue;
+	border: none;
+	border-bottom: .3rem solid darken($dark-blue, 10%);
+	color: $off-white;
+	flex-grow: 1;
+	//margin-right: $s-size;		//Se cambia en el @media
+	margin: 0 0 $s-size 0;
+	padding: $s-size;
+}
+
+.add-option-error{
+	color: $off-white;
+	font-style: italic;
+	//En este caso solo es m-size para la parte de arriba
+	margin: $m-size 0 0 0;
+	padding: 0 $m-size;
+}
+
+@media (min-width: $desktop-breakpoint){
+	.add-option{
+		flex-direction: row;
+	}
+
+	.add-option__input{
+		margin: 0 $s-size 0 0;
+	}
+}

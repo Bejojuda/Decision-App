@@ -17,8 +17,8 @@ class Option extends React.Component{
 
 //Versión Stateless Functional Component de Option
 const Option =  (props) =>(
-	<div>
-		Option: {props.optiontext}
+	<div className='option'>
+		<p className='option__text'>{props.count}.{props.optiontext}</p>
 		<button 
 			//button es un block de css, button--link es un modifier
 			className='button button--link'
